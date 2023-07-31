@@ -7,7 +7,7 @@ function App() {
   const fullUrl = useQuery("shortener:resolve", {short: fragment});
   useEffect(() => {
     if (typeof fullUrl === "string") {
-      window.location.assign(fullUrl);
+      window.location.replace(fullUrl);
     }
   }, [fullUrl]);
   if (fullUrl === null) {
