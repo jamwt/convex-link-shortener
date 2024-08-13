@@ -1,9 +1,11 @@
 import { Doc } from "./_generated/dataModel";
-import { DatabaseReader, query } from "./_generated/server";
+import { DatabaseReader, httpAction, query } from "./_generated/server";
+import { api } from "./_generated/api";
 
 const LOCAL_DOMAINS = new Set();
 LOCAL_DOMAINS.add("localhost");
 LOCAL_DOMAINS.add("cvx.so");
+LOCAL_DOMAINS.add("moonlit-human-810.convex.site");
 
 export const resolve = query(
   async (
@@ -30,3 +32,29 @@ export const resolve = query(
     return doc?.full ?? null;
   }
 );
+
+export const endpoint = httpAction(async (ctx, request) => {
+  const domain = request.headers.get("Host");
+  const url = new URL(request.url);
+  const path = url?.pathname;
+  const parts = path?.split("/");
+  const short = parts![1]; // First part is empty string -- since path starts with '/'
+
+  const fullUrl = await ctx.runQuery(api.shortener.resolve, {
+    short,
+    domain: domain!,
+  });
+
+  if (typeof fullUrl !== "string") {
+    return new Response("Short link not found", {
+      status: 404,
+    });
+  }
+
+  return new Response(null, {
+    status: 302,
+    headers: new Headers({
+      location: fullUrl!,
+    }),
+  });
+});
