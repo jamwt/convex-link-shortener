@@ -18,7 +18,7 @@ export const resolve = query(
       console.log(`Attempting to resolve local short link: ${short}`);
       doc = await db
         .query("links")
-        .withIndex("by_short", (q) => q.eq("short", short))
+        .withIndex("by_domain", (q) => q.eq("domain", "").eq("short", short))
         .unique();
     } else {
       console.log(`Attempting domain redirect ${domain} ${short}`);
