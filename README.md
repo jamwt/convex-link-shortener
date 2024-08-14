@@ -18,14 +18,14 @@ Just deploy this like any other project.
 
 Then, you have two ways to serve redirects from your custom short-link domain:
 
-## The dumb way
+## The okay way
 
 Deploy the react app to Vercel/Netlify and then set up a domain alias for your project
 there. This will mean the browser has to load an entire little react app just to redirect
 the page via browser APIs (after getting the redirect URL over a WebSocket from the
 Convex deployment.) This works but is slow and h4x.
 
-## The smart way
+## The better way
 
 If you're a Convex Pro customer, use Convex's Custom Domain feature to alias your
 short link domain to your `.site` of your production deployment. An HTTP action
